@@ -1,0 +1,165 @@
+<h1 id="лабораторная-работа-1">Лабораторная работа №1</h1>
+<h2 id="методы-кодирования-и-модуляции-сигналов">Методы кодирования и
+модуляции сигналов</h2>
+<p><strong>Студент:</strong> Зашихалиева З.Р.</p>
+<p><strong>Дата:</strong> 29.03.2026</p>
+<hr />
+<h2 id="цель-работы">Цель работы</h2>
+<p>Изучение методов кодирования и модуляции сигналов с помощью
+Octave.</p>
+<hr />
+<h2 id="задачи">Задачи</h2>
+<ol type="1">
+<li>Построить графики функций</li>
+<li>Разложить меандр в ряд Фурье</li>
+<li>Найти спектр сигналов</li>
+<li>Сделать амплитудную модуляцию</li>
+<li>Реализовать 6 методов кодирования</li>
+</ol>
+<hr />
+<h2 id="установка-octave">Установка Octave</h2>
+<ul>
+<li>Установка: <code>sudo apt install octave</code></li>
+<li>Версия: 8.4.0</li>
+</ul>
+<figure>
+<img src="1.png" alt="Установка" />
+<figcaption aria-hidden="true">Установка</figcaption>
+</figure>
+<hr />
+<h2 id="построение-графиков-функций">Построение графиков функций</h2>
+<p><strong>Формулы:</strong> - y1 = sin x + (1/3) sin 3x + (1/5) sin 5x
+- y2 = cos x + (1/3) cos 3x + (1/5) cos 5x</p>
+<figure>
+<img src="6.png" alt="Графики функций" />
+<figcaption aria-hidden="true">Графики функций</figcaption>
+</figure>
+<hr />
+<h2 id="разложение-меандра">Разложение меандра</h2>
+<ul>
+<li>Меандр содержит только нечетные гармоники</li>
+<li>Чем больше гармоник, тем точнее форма сигнала</li>
+</ul>
+<figure>
+<img src="9.png" alt="Графики меандра" />
+<figcaption aria-hidden="true">Графики меандра</figcaption>
+</figure>
+<hr />
+<h2 id="спектральный-анализ">Спектральный анализ</h2>
+<p>Параметры сигналов: - Сигнал 1: 10 Гц, амплитуда 1 - Сигнал 2: 40 Гц,
+амплитуда 0.7</p>
+<figure>
+<img src="14.png" alt="Спектры сигналов" />
+<figcaption aria-hidden="true">Спектры сигналов</figcaption>
+</figure>
+<hr />
+<h2 id="амплитудная-модуляция">Амплитудная модуляция</h2>
+<ul>
+<li>Низкочастотный сигнал: 5 Гц</li>
+<li>Несущая частота: 50 Гц</li>
+</ul>
+<figure>
+<img src="15.png" alt="Амплитудная модуляция" />
+<figcaption aria-hidden="true">Амплитудная модуляция</figcaption>
+</figure>
+<hr />
+<h2 id="методы-кодирования">Методы кодирования</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Метод</th>
+<th>Файл</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Униполярный</td>
+<td>unipolar.m</td>
+</tr>
+<tr class="even">
+<td>AMI</td>
+<td>ami.m</td>
+</tr>
+<tr class="odd">
+<td>NRZ</td>
+<td>bipolarnrz.m</td>
+</tr>
+<tr class="even">
+<td>RZ</td>
+<td>bipolarrz.m</td>
+</tr>
+<tr class="odd">
+<td>Манчестерский</td>
+<td>manchester.m</td>
+</tr>
+<tr class="even">
+<td>Дифференциальный манчестерский</td>
+<td>diffmanc.m</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="результаты-кодирования">Результаты кодирования</h2>
+<figure>
+<img src="32.png" alt="Результаты кодирования" />
+<figcaption aria-hidden="true">Результаты кодирования</figcaption>
+</figure>
+<hr />
+<h2 id="самосинхронизация">Самосинхронизация</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Метод</th>
+<th>Самосинхронизация</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Униполярный</td>
+<td>Нет</td>
+</tr>
+<tr class="even">
+<td>AMI</td>
+<td>Да</td>
+</tr>
+<tr class="odd">
+<td>NRZ</td>
+<td>Нет</td>
+</tr>
+<tr class="even">
+<td>RZ</td>
+<td>Да</td>
+</tr>
+<tr class="odd">
+<td>Манчестерский</td>
+<td>Да</td>
+</tr>
+<tr class="even">
+<td>Дифференциальный манчестерский</td>
+<td>Да</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="33.png" alt="Проверка самосинхронизации" />
+<figcaption aria-hidden="true">Проверка самосинхронизации</figcaption>
+</figure>
+<hr />
+<h2 id="спектры-кодов">Спектры кодов</h2>
+<figure>
+<img src="34.png" alt="Спектры кодов" />
+<figcaption aria-hidden="true">Спектры кодов</figcaption>
+</figure>
+<hr />
+<h2 id="выводы">Выводы</h2>
+<ol type="1">
+<li>Octave установлен и настроен</li>
+<li>Построены графики функций</li>
+<li>Выполнено разложение меандра</li>
+<li>Проведен спектральный анализ</li>
+<li>Сделана амплитудная модуляция</li>
+<li>Реализованы 6 методов кодирования</li>
+<li>Определены коды с самосинхронизацией</li>
+</ol>
+<hr />
+<h2 id="спасибо-за-внимание">Спасибо за внимание!</h2>
