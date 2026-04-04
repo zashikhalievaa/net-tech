@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Шихалиева Зурият Арсеновна">
+  <title>Сетевые технологии</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/metropolis.css" id="theme">
+  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Сетевые технологии</h1>
+  <p class="subtitle">Адресация IPv4 и IPv6. Настройка маршрутизации</p>
+  <p class="author">Шихалиева Зурият Арсеновна</p>
+  <p class="institute">Российский университет дружбы народов, Москва,
+Россия</p>
+  <p class="date">19 декабря 2025</p>
+</section>
+
+<section>
+<section id="цель-работы" class="title-slide slide level1">
+<h1>Цель работы</h1>
+
+</section>
+<section id="основная-цель" class="slide level2">
+<h2>Основная цель</h2>
+<p>Изучить принципы адресации и маршрутизации в сетях IPv4 и IPv6, а
+также механизм организации туннеля IPv6 поверх IPv4 с использованием
+маршрутизаторов VyOS и среды моделирования GNS3.</p>
+</section></section>
+<section>
+<section id="исходная-топология" class="title-slide slide level1">
+<h1>Исходная топология</h1>
+
+</section>
+<section id="общая-схема-сети" class="slide level2">
+<h2>Общая схема сети</h2>
+<ul>
+<li>Две изолированные IPv6-сети<br />
+</li>
+<li>Транзитная IPv4-сеть между ними<br />
+</li>
+<li>Три маршрутизатора VyOS<br />
+</li>
+<li>Два оконечных узла VPCS</li>
+</ul>
+<figure>
+<img data-src="image/1.png" style="width:80.0%" alt="Топология сети" />
+<figcaption aria-hidden="true">Топология сети</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="адресация-ipv6-на-оконечных-узлах"
+class="title-slide slide level1">
+<h1>Адресация IPv6 на оконечных узлах</h1>
+
+</section>
+<section id="настройка-pc1" class="slide level2">
+<h2>Настройка PC1</h2>
+<ul>
+<li>IPv6-адрес: <strong>1000::a/64</strong></li>
+<li>Автоматическое получение шлюза через Router Advertisement</li>
+<li>Проверка параметров IPv6</li>
+</ul>
+<figure>
+<img data-src="image/2.png" style="width:70.0%" alt="PC1 IPv6" />
+<figcaption aria-hidden="true">PC1 IPv6</figcaption>
+</figure>
+</section>
+<section id="настройка-pc2" class="slide level2">
+<h2>Настройка PC2</h2>
+<ul>
+<li>IPv6-адрес: <strong>1002::a/64</strong></li>
+<li>Получение link-local и глобального адресов</li>
+<li>Проверка конфигурации</li>
+</ul>
+<figure>
+<img data-src="image/3.png" style="width:70.0%" alt="PC2 IPv6" />
+<figcaption aria-hidden="true">PC2 IPv6</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="настройка-граничных-маршрутизаторов"
+class="title-slide slide level1">
+<h1>Настройка граничных маршрутизаторов</h1>
+
+</section>
+<section id="маршрутизатор-msk-zashikhalieva-gw-01"
+class="slide level2">
+<h2>Маршрутизатор msk-zashikhalieva-gw-01</h2>
+<ul>
+<li>IPv6: <strong>1000::1/64</strong> (локальная сеть PC1)</li>
+<li>IPv4: <strong>10.0.0.1/8</strong></li>
+<li>Включение Router Advertisement</li>
+</ul>
+<figure>
+<img data-src="image/4.png" style="width:75.0%" alt="gw-01 config" />
+<figcaption aria-hidden="true">gw-01 config</figcaption>
+</figure>
+</section>
+<section id="маршрутизатор-msk-zashikhalieva-gw-02"
+class="slide level2">
+<h2>Маршрутизатор msk-zashikhalieva-gw-02</h2>
+<ul>
+<li>IPv6: <strong>1002::1/64</strong> (локальная сеть PC2)</li>
+<li>IPv4: <strong>20.0.0.2/8</strong></li>
+<li>Включение Router Advertisement</li>
+</ul>
+<figure>
+<img data-src="image/5.png" style="width:75.0%" alt="gw-02 config" />
+<figcaption aria-hidden="true">gw-02 config</figcaption>
+</figure>
+</section>
+<section id="транзитный-маршрутизатор-msk-zashikhalieva-gw-03"
+class="slide level2">
+<h2>Транзитный маршрутизатор msk-zashikhalieva-gw-03</h2>
+<ul>
+<li>IPv4: <strong>10.0.0.2/8</strong> и <strong>20.0.0.1/8</strong></li>
+<li>Обеспечение связи между IPv4-сетями</li>
+</ul>
+<figure>
+<img data-src="image/6.png" style="width:75.0%" alt="gw-03 config" />
+<figcaption aria-hidden="true">gw-03 config</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="проверка-ipv4-связности-до-маршрутизации"
+class="title-slide slide level1">
+<h1>Проверка IPv4-связности (до маршрутизации)</h1>
+
+</section>
+<section id="результаты-проверки" class="slide level2">
+<h2>Результаты проверки</h2>
+<ul>
+<li>Доступна сеть <strong>10.0.0.0/8</strong></li>
+<li>Сеть <strong>20.0.0.0/8</strong> недостижима</li>
+<li>Причина — отсутствие маршрутов</li>
+</ul>
+<figure>
+<img data-src="image/9.png" style="width:80.0%" alt="IPv4 ping fail" />
+<figcaption aria-hidden="true">IPv4 ping fail</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="динамическая-маршрутизация-ipv4-rip"
+class="title-slide slide level1">
+<h1>Динамическая маршрутизация IPv4 (RIP)</h1>
+
+</section>
+<section id="настройка-rip" class="slide level2">
+<h2>Настройка RIP</h2>
+<ul>
+<li>gw-01: сеть <strong>10.0.0.0/8</strong></li>
+</ul>
+<figure>
+<img data-src="image/11.png" style="width:70.0%" alt="RIP gw-01" />
+<figcaption aria-hidden="true">RIP gw-01</figcaption>
+</figure>
+</section>
+<section id="настройка-rip-1" class="slide level2">
+<h2>Настройка RIP</h2>
+<ul>
+<li>gw-02: сеть <strong>20.0.0.0/8</strong></li>
+</ul>
+<figure>
+<img data-src="image/12.png" style="width:70.0%" alt="RIP gw-03" />
+<figcaption aria-hidden="true">RIP gw-03</figcaption>
+</figure>
+</section>
+<section id="настройка-rip-2" class="slide level2">
+<h2>Настройка RIP</h2>
+<ul>
+<li>gw-03: обе сети</li>
+</ul>
+</section></section>
+<section>
+<section id="анализ-ipv4-трафика" class="title-slide slide level1">
+<h1>Анализ IPv4-трафика</h1>
+
+</section>
+<section id="rip-и-icmp" class="slide level2">
+<h2>RIP и ICMP</h2>
+<ul>
+<li>RIP-пакеты на <strong>224.0.0.9</strong></li>
+<li>ICMP Echo Request / Reply между сетями</li>
+</ul>
+<figure>
+<img data-src="image/15.png" style="width:90.0%" alt="RIP + ICMP" />
+<figcaption aria-hidden="true">RIP + ICMP</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="туннелирование-ipv6-поверх-ipv4"
+class="title-slide slide level1">
+<h1>Туннелирование IPv6 поверх IPv4</h1>
+
+</section>
+<section id="создание-туннеля-6in4" class="slide level2">
+<h2>Создание туннеля 6in4</h2>
+<ul>
+<li>Тип туннеля: <strong>SIT</strong></li>
+<li>gw-01 ↔︎ gw-02</li>
+</ul>
+<figure>
+<img data-src="image/16.png" style="width:80.0%" alt="Tunnel gw-01" />
+<figcaption aria-hidden="true">Tunnel gw-01</figcaption>
+</figure>
+</section>
+<section id="создание-туннеля-6in4-1" class="slide level2">
+<h2>Создание туннеля 6in4</h2>
+<ul>
+<li>IPv6-сеть туннеля: <strong>1001::/64</strong></li>
+</ul>
+<figure>
+<img data-src="image/17.png" style="width:80.0%" alt="Tunnel gw-02" />
+<figcaption aria-hidden="true">Tunnel gw-02</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="статическая-маршрутизация-ipv6"
+class="title-slide slide level1">
+<h1>Статическая маршрутизация IPv6</h1>
+
+</section>
+<section id="настройка-маршрутов" class="slide level2">
+<h2>Настройка маршрутов</h2>
+<ul>
+<li>gw-01 → <strong>1002::/64</strong> через
+<strong>1001::2</strong></li>
+</ul>
+<figure>
+<img data-src="image/18.png" style="width:75.0%"
+alt="IPv6 route gw-01" />
+<figcaption aria-hidden="true">IPv6 route gw-01</figcaption>
+</figure>
+</section>
+<section id="настройка-маршрутов-1" class="slide level2">
+<h2>Настройка маршрутов</h2>
+<ul>
+<li>gw-02 → <strong>1000::/64</strong> через
+<strong>1001::1</strong></li>
+</ul>
+<figure>
+<img data-src="image/19.png" style="width:75.0%"
+alt="IPv6 route gw-02" />
+<figcaption aria-hidden="true">IPv6 route gw-02</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="проверка-ipv6-доступности"
+class="title-slide slide level1">
+<h1>Проверка IPv6-доступности</h1>
+
+</section>
+<section id="pc1-pc2" class="slide level2">
+<h2>PC1 → PC2</h2>
+<ul>
+<li>Ping успешен</li>
+<li>Traceroute проходит через туннель</li>
+</ul>
+<figure>
+<img data-src="image/20.png" style="width:80.0%" alt="PC1 ping6" />
+<figcaption aria-hidden="true">PC1 ping6</figcaption>
+</figure>
+</section>
+<section id="pc2-pc1" class="slide level2">
+<h2>PC2 → PC1</h2>
+<ul>
+<li>Двусторонняя IPv6-связность</li>
+<li>Корректная маршрутизация</li>
+</ul>
+<figure>
+<img data-src="image/21.png" style="width:80.0%" alt="PC2 ping6" />
+<figcaption aria-hidden="true">PC2 ping6</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="анализ-туннельного-трафика"
+class="title-slide slide level1">
+<h1>Анализ туннельного трафика</h1>
+
+</section>
+<section id="ipv6-внутри-ipv4" class="slide level2">
+<h2>IPv6 внутри IPv4</h2>
+<ul>
+<li>IPv4-пакеты с <strong>protocol = 41</strong></li>
+<li>Внутри — ICMPv6</li>
+<li>Адреса 1000::a ↔︎ 1002::a</li>
+</ul>
+<figure>
+<img data-src="image/22.png" style="width:90.0%" alt="IPv6 in IPv4" />
+<figcaption aria-hidden="true">IPv6 in IPv4</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="итоги-работы" class="title-slide slide level1">
+<h1>Итоги работы</h1>
+
+</section>
+<section id="основные-результаты" class="slide level2">
+<h2>Основные результаты</h2>
+<ul>
+<li>Построена модель сети IPv4/IPv6 в GNS3<br />
+</li>
+<li>Настроена адресация IPv6 и IPv4<br />
+</li>
+<li>Реализована динамическая маршрутизация IPv4 (RIP)<br />
+</li>
+<li>Создан туннель IPv6 поверх IPv4 (6in4)<br />
+</li>
+<li>Настроена статическая маршрутизация IPv6<br />
+</li>
+<li>Подтверждена работоспособность сети и туннеля<br />
+</li>
+<li>Проанализирована инкапсуляция IPv6-трафика в IPv4</li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
